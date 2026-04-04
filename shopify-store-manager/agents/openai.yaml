@@ -1,0 +1,4 @@
+interface:
+  display_name: "Shopify Store Manager"
+  short_description: "Bootstrap and manage Shopify store workspaces."
+  default_prompt: "Use $shopify-store-manager to initialize the current folder for a Shopify store and manage its exported workspace."
