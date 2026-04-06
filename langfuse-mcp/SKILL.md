@@ -8,10 +8,10 @@ compatibility: Requires `uvx` with `mcp2cli` access and network access to the La
 
 This skill uses a skill-local `mcp2cli` baked config plus the wrapper in `scripts/`.
 
-Use the wrapper instead of repeating the raw endpoint URL:
+From the `langfuse-mcp` skill directory, use the wrapper instead of repeating the raw endpoint URL:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" --list
+bash scripts/langfuse-mcp --list
 ```
 
 The wrapper sets `MCP2CLI_CONFIG_DIR` to the skill's own `config/` directory, so this skill does not depend on global `~/.config/mcp2cli` state.
@@ -21,31 +21,91 @@ The wrapper sets `MCP2CLI_CONFIG_DIR` to the skill's own `config/` directory, so
 1. Discover tools:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" --list
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" --search trace
+bash scripts/langfuse-mcp --list
+bash scripts/langfuse-mcp --search trace
 ```
 
 2. Inspect parameters before calling a tool:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" fetch-traces --help
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" list-prompts --help
+bash scripts/langfuse-mcp fetch-traces --help
+bash scripts/langfuse-mcp list-prompts --help
 ```
 
 3. Run the smallest useful query first:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" fetch-traces --limit 1
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" list-prompts --limit 5
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" list-datasets --limit 5
+bash scripts/langfuse-mcp fetch-traces --limit 1
+bash scripts/langfuse-mcp list-prompts --limit 5
+bash scripts/langfuse-mcp list-datasets --limit 5
 ```
 
 4. Use `--jq` for follow-up filtering instead of ad hoc scripts:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" --jq '.data | length' list-datasets
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" --jq '.data[]?.id' fetch-traces --limit 5
+bash scripts/langfuse-mcp --jq '.data | length' list-datasets
+bash scripts/langfuse-mcp --jq '.data[]?.id' fetch-traces --limit 5
 ```
+
+## Available tools
+
+### Prompts
+
+- `list-prompts`: list prompt definitions and filter by prompt metadata such as name, label, or tag.
+- `get-prompt`: fetch a prompt by name with dependencies resolved.
+- `get-prompt-unresolved`: fetch the raw prompt definition without resolving dependencies.
+- `create-text-prompt`: create a new text prompt version.
+- `create-chat-prompt`: create a new chat prompt version.
+- `update-prompt-labels`: update labels for a specific prompt version.
+
+### Traces and observations
+
+- `fetch-traces`: search traces with optional filters such as age, name, user, session, tags, or metadata.
+- `fetch-trace`: fetch one trace by trace ID with full details.
+- `fetch-observations`: list observations filtered by type and related criteria.
+- `fetch-observation`: fetch one observation by observation ID.
+- `get-data-schema`: return the Langfuse trace, observation, event, and score schema reference.
+
+### Sessions
+
+- `fetch-sessions`: list sessions in the current project.
+- `get-session-details`: fetch one session with detailed session information.
+- `get-user-sessions`: list sessions for a specific user in a time range.
+
+### Scores
+
+- `list-scores-v2`: list scores with optional filters.
+- `get-score-v2`: fetch one score by score ID.
+
+### Datasets
+
+- `list-datasets`: list datasets in the current project.
+- `get-dataset`: fetch one dataset by dataset name.
+- `create-dataset`: create a new dataset.
+- `list-dataset-items`: list items inside a dataset with pagination and filtering.
+- `get-dataset-item`: fetch one dataset item by item ID.
+- `create-dataset-item`: create or upsert a dataset item.
+- `delete-dataset-item`: permanently delete a dataset item.
+
+### Annotation queues
+
+- `list-annotation-queues`: list annotation queues.
+- `create-annotation-queue`: create a new annotation queue.
+- `get-annotation-queue`: fetch one annotation queue by queue ID.
+- `list-annotation-queue-items`: list items inside an annotation queue.
+- `get-annotation-queue-item`: fetch one queue item by queue ID and item ID.
+- `create-annotation-queue-item`: add an item to an annotation queue.
+- `update-annotation-queue-item`: update the status of a queue item.
+- `delete-annotation-queue-item`: remove an item from an annotation queue.
+- `create-annotation-queue-assignment`: assign a user to a queue.
+- `delete-annotation-queue-assignment`: remove a user assignment from a queue.
+
+### Exceptions and errors
+
+- `find-exceptions`: aggregate exceptions by file path, function, or type.
+- `find-exceptions-in-file`: inspect exceptions for a specific file.
+- `get-exception-details`: fetch detailed exception data for a trace or span.
+- `get-error-count`: return the number of traces with exceptions in a recent time window.
 
 ## Tested behaviors
 
@@ -100,23 +160,23 @@ Start with these tools for most requests:
 Recent traces:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" fetch-traces --age 60 --limit 5
+bash scripts/langfuse-mcp fetch-traces --age 60 --limit 5
 ```
 
 Recent traces with only IDs:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" --jq '.data[]?.id' fetch-traces --age 60 --limit 5
+bash scripts/langfuse-mcp --jq '.data[]?.id' fetch-traces --age 60 --limit 5
 ```
 
 Prompt inventory:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" list-prompts --limit 20
+bash scripts/langfuse-mcp list-prompts --limit 20
 ```
 
 Inspect the data model before querying:
 
 ```bash
-bash "${CLAUDE_SKILL_DIR}/scripts/langfuse-mcp" get-data-schema
+bash scripts/langfuse-mcp get-data-schema
 ```
