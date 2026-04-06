@@ -1,0 +1,23 @@
+{
+  "skill_name": "langfuse-mcp",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "Use the Langfuse MCP skill to inspect the schema first, then tell me which fields exist on traces, observations, and scores.",
+      "expected_output": "The response should call the wrapper, use get-data-schema, and summarize the trace, observation, and score fields without inventing fields.",
+      "files": []
+    },
+    {
+      "id": 2,
+      "prompt": "List recent Langfuse prompts through the MCP, but start with a small page size so we do not dump a huge response.",
+      "expected_output": "The response should use the wrapper, inspect or call list-prompts with a bounded limit, and treat empty results as valid.",
+      "files": []
+    },
+    {
+      "id": 3,
+      "prompt": "Find recent Langfuse traces from the last hour and only show the trace IDs if any exist.",
+      "expected_output": "The response should use fetch-traces with narrow scope and filter output with jq rather than writing a custom parser.",
+      "files": []
+    }
+  ]
+}

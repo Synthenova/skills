@@ -1,0 +1,27 @@
+{
+  "posthog-mcp": {
+    "source_type": "mcp",
+    "source": "https://mcp.posthog.com/mcp",
+    "base_url": null,
+    "auth_headers": [
+      [
+        "Authorization",
+        "env:POSTHOG_MCP_AUTH_HEADER"
+      ]
+    ],
+    "env_vars": {},
+    "cache_ttl": 3600,
+    "transport": "auto",
+    "oauth": false,
+    "oauth_client_id": null,
+    "oauth_client_secret": null,
+    "oauth_client_name": "mcp2cli",
+    "oauth_scope": null,
+    "oauth_redirect_uri": null,
+    "oauth_flow": "auto",
+    "include": [],
+    "exclude": [],
+    "methods": [],
+    "description": "PostHog MCP wrapper for project-scoped analytics, docs, flags, experiments, dashboards, and related tools."
+  }
+}

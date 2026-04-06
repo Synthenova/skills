@@ -1,0 +1,22 @@
+{
+  "langfuse-mcp": {
+    "source_type": "mcp",
+    "source": "http://72.61.251.227:8789/mcp",
+    "base_url": null,
+    "auth_headers": [],
+    "env_vars": {},
+    "cache_ttl": 3600,
+    "transport": "auto",
+    "oauth": false,
+    "oauth_client_id": null,
+    "oauth_client_secret": null,
+    "oauth_client_name": "mcp2cli",
+    "oauth_scope": null,
+    "oauth_redirect_uri": null,
+    "oauth_flow": "auto",
+    "include": [],
+    "exclude": [],
+    "methods": [],
+    "description": "Langfuse MCP wrapper for traces, prompts, sessions, scores, datasets, and exceptions."
+  }
+}
