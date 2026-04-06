@@ -9,28 +9,30 @@ Use this skill when a Steel orchestrator is running on the Mac and a remote mach
 
 This skill covers profile lifecycle over HTTP and browser attachment over the profile WebSocket/CDP endpoint. For actual page automation after attaching, continue with the `agent-browser` skill.
 
+Use the injected environment variable `STEEL_ORCHESTRATOR_HOST` for the orchestrator host. Do not hardcode a hostname or IP in examples or commands.
+
 ## Profile lifecycle over HTTP
 
 Use the orchestrator API to list, create, start, stop, and inspect profiles.
 
 ```bash
-curl http://<mac-orchestrator-host>:4010/profiles
-curl http://<mac-orchestrator-host>:4010/profiles/<profile-id>
-curl http://<mac-orchestrator-host>:4010/profiles/<profile-id>/connection
-curl -X POST http://<mac-orchestrator-host>:4010/profiles/<profile-id>/start
-curl -X POST http://<mac-orchestrator-host>:4010/profiles/<profile-id>/stop
+curl "http://${STEEL_ORCHESTRATOR_HOST}/profiles"
+curl "http://${STEEL_ORCHESTRATOR_HOST}/profiles/<profile-id>"
+curl "http://${STEEL_ORCHESTRATOR_HOST}/profiles/<profile-id>/connection"
+curl -X POST "http://${STEEL_ORCHESTRATOR_HOST}/profiles/<profile-id>/start"
+curl -X POST "http://${STEEL_ORCHESTRATOR_HOST}/profiles/<profile-id>/stop"
 ```
 
 Treat profile creation, proxy config, and runtime state as HTTP-managed concerns.
 
 ## Attach agent-browser to the running profile
 
-When a profile is running, use the `wsEndpoint` from `/connection` and pass it to `agent-browser --cdp`.
+When a profile is running, use the `wsEndpoint` from `/connection` and pass it to `agent-browser --cdp`. The agent environment will already have `STEEL_ORCHESTRATOR_HOST` injected, so use that same variable when constructing the WebSocket URL.
 
 ```bash
-agent-browser --cdp "ws://<mac-orchestrator-host>:4010/profiles/<profile-id>/ws" snapshot
-agent-browser --cdp "ws://<mac-orchestrator-host>:4010/profiles/<profile-id>/ws" open https://example.com
-agent-browser --cdp "ws://<mac-orchestrator-host>:4010/profiles/<profile-id>/ws" eval 'document.body.innerText'
+agent-browser --cdp "ws://${STEEL_ORCHESTRATOR_HOST}/profiles/<profile-id>/ws" snapshot
+agent-browser --cdp "ws://${STEEL_ORCHESTRATOR_HOST}/profiles/<profile-id>/ws" open https://example.com
+agent-browser --cdp "ws://${STEEL_ORCHESTRATOR_HOST}/profiles/<profile-id>/ws" eval 'document.body.innerText'
 ```
 
 If the profile is already running, reuse its reported `wsEndpoint` instead of starting a second instance.
