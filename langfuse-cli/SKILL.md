@@ -1,50 +1,59 @@
+name: langfuse-cli
+description: Access Langfuse through a local stdio `langfuse-mcp` process wrapped by `mcp2cli`. Use this whenever the user wants to inspect Langfuse traces, observations, prompts, sessions, scores, datasets, or exceptions from the terminal and should talk to the MCP over stdio instead of a long-lived HTTP bridge.
+compatibility: Requires `uvx` with `mcp2cli` access, `uvx --python 3.11 langfuse-mcp`, and `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` in the environment.
 ---
-name: langfuse-mcp
-description: Access the Langfuse MCP at http://72.61.251.227:8789/mcp through a local mcp2cli wrapper. Use this whenever the user wants to inspect Langfuse traces, observations, prompts, sessions, scores, datasets, or exceptions from the terminal, especially when they mention Langfuse, traces, prompts, sessions, datasets, prompt versions, or observability data and need to query the MCP rather than write custom code.
-compatibility: Requires `uvx` with `mcp2cli` access and network access to the Langfuse MCP endpoint.
----
 
-# Langfuse MCP
+# Langfuse CLI
 
-This skill uses a skill-local `mcp2cli` baked config plus the wrapper in `scripts/`.
+This skill uses a skill-local `mcp2cli` baked config plus the wrapper in `scripts/`, but it connects to Langfuse over stdio rather than an HTTP MCP bridge.
 
-From the `langfuse-mcp` skill directory, use the wrapper instead of repeating the raw endpoint URL:
+From the `langfuse-cli` skill directory, use the wrapper instead of repeating the stdio command and env setup:
 
 ```bash
-bash scripts/langfuse-mcp --list
+bash scripts/langfuse-cli --list
 ```
 
-The wrapper sets `MCP2CLI_CONFIG_DIR` to the skill's own `config/` directory, so this skill does not depend on global `~/.config/mcp2cli` state.
+The wrapper sets `MCP2CLI_CONFIG_DIR` to the skill's own `config/` directory, so this skill does not depend on global `~/.config/mcp2cli` state. The wrapper expects `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` to already be exported in the shell.
+
+Before using it:
+
+```bash
+export LANGFUSE_PUBLIC_KEY=...
+export LANGFUSE_SECRET_KEY=...
+export LANGFUSE_HOST=https://cloud.langfuse.com
+```
+
+If `/tmp/langfuse_mcp.log` exists but is not writable by the current user, the stdio server can fail at startup. Clear or chown that file before retrying.
 
 ## Core workflow
 
 1. Discover tools:
 
 ```bash
-bash scripts/langfuse-mcp --list
-bash scripts/langfuse-mcp --search trace
+bash scripts/langfuse-cli --list
+bash scripts/langfuse-cli --search trace
 ```
 
 2. Inspect parameters before calling a tool:
 
 ```bash
-bash scripts/langfuse-mcp fetch-traces --help
-bash scripts/langfuse-mcp list-prompts --help
+bash scripts/langfuse-cli fetch-traces --help
+bash scripts/langfuse-cli list-prompts --help
 ```
 
 3. Run the smallest useful query first:
 
 ```bash
-bash scripts/langfuse-mcp fetch-traces --limit 1
-bash scripts/langfuse-mcp list-prompts --limit 5
-bash scripts/langfuse-mcp list-datasets --limit 5
+bash scripts/langfuse-cli fetch-traces --limit 1
+bash scripts/langfuse-cli list-prompts --limit 5
+bash scripts/langfuse-cli list-datasets --limit 5
 ```
 
 4. Use `--jq` for follow-up filtering instead of ad hoc scripts:
 
 ```bash
-bash scripts/langfuse-mcp --jq '.data | length' list-datasets
-bash scripts/langfuse-mcp --jq '.data[]?.id' fetch-traces --limit 5
+bash scripts/langfuse-cli --jq '.data | length' list-datasets
+bash scripts/langfuse-cli --jq '.data[]?.id' fetch-traces --limit 5
 ```
 
 ## Available tools
@@ -109,9 +118,9 @@ bash scripts/langfuse-mcp --jq '.data[]?.id' fetch-traces --limit 5
 
 ## Tested behaviors
 
-These were verified against the live endpoint before packaging this skill:
+These were verified against the stdio server before packaging this skill:
 
-- `--list` works without an auth header on the supplied endpoint.
+- `--list` works over stdio when `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` are set.
 - `list-prompts --limit 1` returned a valid empty paginated result:
 
 ```json
@@ -121,6 +130,7 @@ These were verified against the live endpoint before packaging this skill:
 - `list-datasets --limit 1` also returned a valid empty paginated result. Empty collections are normal and should not be treated as transport failures.
 - `get-data-schema` returns a Markdown-style schema document, not JSON. Do not assume every tool returns machine-shaped JSON.
 - `fetch-traces --help` shows `--include-observations` and `--output-mode`. Those materially affect response size and latency.
+- If `/tmp/langfuse_mcp.log` is root-owned from an earlier privileged run, the stdio server can fail with `PermissionError`. Remove that file before retrying.
 
 ## What to use first
 
@@ -160,23 +170,23 @@ Start with these tools for most requests:
 Recent traces:
 
 ```bash
-bash scripts/langfuse-mcp fetch-traces --age 60 --limit 5
+bash scripts/langfuse-cli fetch-traces --age 60 --limit 5
 ```
 
 Recent traces with only IDs:
 
 ```bash
-bash scripts/langfuse-mcp --jq '.data[]?.id' fetch-traces --age 60 --limit 5
+bash scripts/langfuse-cli --jq '.data[]?.id' fetch-traces --age 60 --limit 5
 ```
 
 Prompt inventory:
 
 ```bash
-bash scripts/langfuse-mcp list-prompts --limit 20
+bash scripts/langfuse-cli list-prompts --limit 20
 ```
 
 Inspect the data model before querying:
 
 ```bash
-bash scripts/langfuse-mcp get-data-schema
+bash scripts/langfuse-cli get-data-schema
 ```

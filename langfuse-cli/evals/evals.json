@@ -1,15 +1,15 @@
 {
-  "skill_name": "langfuse-mcp",
+  "skill_name": "langfuse-cli",
   "evals": [
     {
       "id": 1,
-      "prompt": "Use the Langfuse MCP skill to inspect the schema first, then tell me which fields exist on traces, observations, and scores.",
+      "prompt": "Use the Langfuse CLI skill to inspect the schema first, then tell me which fields exist on traces, observations, and scores.",
       "expected_output": "The response should call the wrapper, use get-data-schema, and summarize the trace, observation, and score fields without inventing fields.",
       "files": []
     },
     {
       "id": 2,
-      "prompt": "List recent Langfuse prompts through the MCP, but start with a small page size so we do not dump a huge response.",
+      "prompt": "List recent Langfuse prompts through the CLI, but start with a small page size so we do not dump a huge response.",
       "expected_output": "The response should use the wrapper, inspect or call list-prompts with a bounded limit, and treat empty results as valid.",
       "files": []
     },

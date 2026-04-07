@@ -1,0 +1,17 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+SCRIPT_DIR=$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)
+export MCP2CLI_CONFIG_DIR="${SCRIPT_DIR}/../config"
+
+if [ -z "${LANGFUSE_PUBLIC_KEY:-}" ] || [ -z "${LANGFUSE_SECRET_KEY:-}" ] || [ -z "${LANGFUSE_HOST:-}" ]; then
+  echo "LANGFUSE_PUBLIC_KEY, LANGFUSE_SECRET_KEY, and LANGFUSE_HOST are required" >&2
+  exit 1
+fi
+
+if [ -e /tmp/langfuse_mcp.log ] && [ ! -w /tmp/langfuse_mcp.log ]; then
+  echo "/tmp/langfuse_mcp.log exists but is not writable by $(id -un); remove or chown it before running langfuse-cli" >&2
+  exit 1
+fi
+
+exec /home/lamrin/.cache/uv/archive-v0/Hj__dDMjU1XU-7V8sJzvv/bin/mcp2cli @langfuse-cli "$@"

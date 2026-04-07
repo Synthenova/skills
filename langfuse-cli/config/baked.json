@@ -1,7 +1,7 @@
 {
-  "langfuse-mcp": {
-    "source_type": "mcp",
-    "source": "http://72.61.251.227:8789/mcp",
+  "langfuse-cli": {
+    "source_type": "mcp_stdio",
+    "source": "uvx --python 3.11 langfuse-mcp",
     "base_url": null,
     "auth_headers": [],
     "env_vars": {},
@@ -17,6 +17,6 @@
     "include": [],
     "exclude": [],
     "methods": [],
-    "description": "Langfuse MCP wrapper for traces, prompts, sessions, scores, datasets, and exceptions."
+    "description": "Langfuse stdio CLI wrapper for traces, prompts, sessions, scores, datasets, and exceptions."
   }
 }
