@@ -1,21 +1,21 @@
 {
-  "skill_name": "posthog-mcp",
+  "skill_name": "posthog-cli",
   "evals": [
     {
       "id": 1,
-      "prompt": "Use the PostHog MCP skill to search the docs for feature flags and summarize the most relevant setup links.",
+      "prompt": "Use the PostHog CLI skill to search the docs for feature flags and summarize the most relevant setup links.",
       "expected_output": "The response should call docs-search through the wrapper and summarize the returned documentation without exposing the token.",
       "files": []
     },
     {
       "id": 2,
-      "prompt": "Show me a few PostHog event definitions through the MCP so I can see what events exist in this project.",
+      "prompt": "Show me a few PostHog event definitions through the CLI so I can see what events exist in this project.",
       "expected_output": "The response should use a read-oriented project endpoint such as event-definitions-list with a bounded result size.",
       "files": []
     },
     {
       "id": 3,
-      "prompt": "Try to inspect the PostHog org from this MCP token. If the token is too narrow, explain the constraint and fall back to project-level tools.",
+      "prompt": "Try to inspect the PostHog org from this CLI token. If the token is too narrow, explain the constraint and fall back to project-level tools.",
       "expected_output": "The response should recognize or explain the project-scoped 403 behavior and avoid repeatedly failing org-level calls.",
       "files": []
     }

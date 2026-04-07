@@ -10,4 +10,4 @@ if [ -z "${POSTHOG_MCP_TOKEN:-}" ]; then
 fi
 
 export POSTHOG_MCP_AUTH_HEADER="Bearer ${POSTHOG_MCP_TOKEN}"
-exec /home/lamrin/.cache/uv/archive-v0/Hj__dDMjU1XU-7V8sJzvv/bin/mcp2cli @posthog-mcp "$@"
+exec /home/lamrin/.cache/uv/archive-v0/Hj__dDMjU1XU-7V8sJzvv/bin/mcp2cli @posthog-cli "$@"

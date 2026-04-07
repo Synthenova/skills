@@ -1,10 +1,9 @@
----
-name: posthog-mcp
+name: posthog-cli
 description: Access the PostHog MCP at https://mcp.posthog.com/mcp through a local mcp2cli wrapper. Use this whenever the user wants to inspect PostHog product analytics, feature flags, experiments, dashboards, persons, prompts, LLM traces, or documentation from the terminal, especially when they mention PostHog, feature flags, experiments, insights, events, logs, dashboards, or analytics queries and need to operate through the MCP instead of writing custom API code.
 compatibility: Requires `uvx` with `mcp2cli`, network access to the PostHog MCP endpoint, and `POSTHOG_MCP_TOKEN` set in the environment.
 ---
 
-# PostHog MCP
+# PostHog CLI
 
 This skill uses a skill-local `mcp2cli` baked config plus the wrapper in `scripts/`.
 
@@ -16,10 +15,10 @@ export POSTHOG_MCP_TOKEN=...
 
 The wrapper sets `MCP2CLI_CONFIG_DIR` to the skill's own `config/` directory, derives the required `Authorization: Bearer ...` header from `POSTHOG_MCP_TOKEN`, and then calls the baked tool.
 
-From the `posthog-mcp` skill directory, use the wrapper like this:
+From the `posthog-cli` skill directory, use the wrapper like this:
 
 ```bash
-bash scripts/posthog-mcp --list
+bash scripts/posthog-cli --list
 ```
 
 ## Core workflow
@@ -27,29 +26,29 @@ bash scripts/posthog-mcp --list
 1. Discover tools:
 
 ```bash
-bash scripts/posthog-mcp --list
-bash scripts/posthog-mcp --search feature
+bash scripts/posthog-cli --list
+bash scripts/posthog-cli --search feature
 ```
 
 2. Inspect parameters before calling a tool:
 
 ```bash
-bash scripts/posthog-mcp event-definitions-list --help
-bash scripts/posthog-mcp docs-search --help
-bash scripts/posthog-mcp query-run --help
+bash scripts/posthog-cli event-definitions-list --help
+bash scripts/posthog-cli docs-search --help
+bash scripts/posthog-cli query-run --help
 ```
 
 3. Start with a read call or a documentation search:
 
 ```bash
-bash scripts/posthog-mcp event-definitions-list --limit 5
-bash scripts/posthog-mcp docs-search --query "feature flags"
+bash scripts/posthog-cli event-definitions-list --limit 5
+bash scripts/posthog-cli docs-search --query "feature flags"
 ```
 
 4. Use `--jq` for JSON-shaped outputs, but expect some tools to return text content:
 
 ```bash
-bash scripts/posthog-mcp --jq '.[].name' event-definitions-list --limit 5
+bash scripts/posthog-cli --jq '.[].name' event-definitions-list --limit 5
 ```
 
 ## Available tools
@@ -232,7 +231,7 @@ Start with these tools for most requests:
 - Global options such as `--head` belong before the subcommand:
 
 ```bash
-bash scripts/posthog-mcp --head 2 docs-search --query "feature flags"
+bash scripts/posthog-cli --head 2 docs-search --query "feature flags"
 ```
 
 - Not every tool supports `--limit`. Check `--help` before assuming pagination flags exist.
@@ -245,17 +244,17 @@ bash scripts/posthog-mcp --head 2 docs-search --query "feature flags"
 Search docs for a product concept:
 
 ```bash
-bash scripts/posthog-mcp docs-search --query "feature flags"
+bash scripts/posthog-cli docs-search --query "feature flags"
 ```
 
 List a few event definitions:
 
 ```bash
-bash scripts/posthog-mcp event-definitions-list --limit 5
+bash scripts/posthog-cli event-definitions-list --limit 5
 ```
 
 Inspect available feature-flag tools:
 
 ```bash
-bash scripts/posthog-mcp --search flag
+bash scripts/posthog-cli --search flag
 ```

@@ -1,5 +1,5 @@
 {
-  "posthog-mcp": {
+  "posthog-cli": {
     "source_type": "mcp",
     "source": "https://mcp.posthog.com/mcp",
     "base_url": null,
@@ -22,6 +22,6 @@
     "include": [],
     "exclude": [],
     "methods": [],
-    "description": "PostHog MCP wrapper for project-scoped analytics, docs, flags, experiments, dashboards, and related tools."
+    "description": "PostHog CLI wrapper for project-scoped analytics, docs, flags, experiments, dashboards, and related tools."
   }
 }
