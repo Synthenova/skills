@@ -8,7 +8,6 @@ Use this file when you need the local `gsc-cli` command inventory without redisc
 - Canonical wrapper: [`scripts/gsc-cli`](/home/lamrin/skills/gsc-cli/scripts/gsc-cli)
 - Default auth mode in this skill: service account via `GSC_CREDENTIALS_PATH`
 - Default data freshness: `GSC_DATA_STATE=all`
-- Optional default property: `GSC_SITE_URL`
 
 ## Available commands
 
@@ -65,8 +64,8 @@ Inspect one URL:
 
 ```bash
 bash scripts/gsc-cli inspect-url-enhanced \
-  --site-url sc-domain:conthunt.app \
-  --page-url https://conthunt.app/
+  --site-url sc-domain:example.com \
+  --page-url https://example.com/specific-page
 ```
 
 Find tool details before a call:
@@ -81,5 +80,5 @@ bash scripts/gsc-cli get-advanced-search-analytics --help
 - Domain properties use `sc-domain:example.com`, not `https://example.com`.
 - `GSC_DATA_STATE=all` includes fresh data and matches the GSC dashboard more closely than `final`.
 - Some responses are formatted text. Do not assume machine-shaped JSON for every tool.
-- If `GSC_SITE_URL` is set, the wrapper injects `--site-url` automatically for commands that require it unless you pass `--site-url` explicitly.
+- Pass `--site-url` explicitly on property-specific commands.
 - The wrapper installs and runs the backing CLI through `uvx`, so users do not need a separate checkout on disk.

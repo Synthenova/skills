@@ -23,7 +23,6 @@ The wrapper defaults to:
 - `GSC_CREDENTIALS_PATH` must point to a service account JSON file unless the local default path exists
 - `GSC_SKIP_OAUTH=true`
 - `GSC_DATA_STATE=all`
-- `GSC_SITE_URL` unset
 
 Override any of those with environment variables before invoking the wrapper.
 
@@ -37,7 +36,6 @@ Optionally set these for convenience:
 
 ```bash
 export GSC_SOURCE=git+https://github.com/AminForou/mcp-gsc
-export GSC_SITE_URL=sc-domain:example.com
 export GSC_DATA_STATE=all
 export GSC_SKIP_OAUTH=true
 ```
@@ -63,7 +61,7 @@ bash scripts/gsc-cli list-sitemaps-enhanced --help
 
 ```bash
 bash scripts/gsc-cli list-properties
-bash scripts/gsc-cli get-performance-overview --site-url "${GSC_SITE_URL:-sc-domain:example.com}" --days 28
+bash scripts/gsc-cli get-performance-overview --site-url sc-domain:example.com --days 28
 ```
 
 4. Use `--jq` only after confirming the output shape:
@@ -102,8 +100,6 @@ Some tools return formatted text rather than clean JSON arrays, so do not assume
   Preferred. Absolute path to the Google service account JSON file.
 - `GSC_SOURCE`
   Optional. Package source passed to `uvx --from ...`. Leave it at the default unless you need a fork or pinned revision.
-- `GSC_SITE_URL`
-  Optional. Default property string such as `sc-domain:example.com` or `https://www.example.com/`.
 - `GSC_DATA_STATE`
   Optional. `all` by default. Set `final` only when you explicitly want confirmed-only data.
 - `GSC_SKIP_OAUTH`
@@ -111,12 +107,11 @@ Some tools return formatted text rather than clean JSON arrays, so do not assume
 - `GSC_ALLOW_DESTRUCTIVE`
   Optional. Leave unset unless you explicitly need state-changing commands.
 
-## Tested Behavior
+## Usage Discipline
 
-- `bash scripts/gsc-cli --list` succeeded with the default `GSC_SOURCE`.
-- `bash scripts/gsc-cli list-properties` succeeded with a service account credentials file and returned:
-  - `sc-domain:conthunt.app (siteOwner)`
-  - `sc-domain:infiknit.app (siteOwner)`
+- Ask the user for the exact property string or run `list-properties` first.
+- Pass `--site-url` explicitly for property-specific commands. Do not assume a default domain.
+- Keep example property strings neutral in explanations unless the user provides a real target.
 
 ## References
 
