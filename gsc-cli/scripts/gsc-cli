@@ -1,0 +1,50 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+DEFAULT_CREDENTIALS_PATH="/home/lamrin/paperclip/service_account_credentials.json"
+DEFAULT_GSC_SOURCE="git+https://github.com/AminForou/mcp-gsc"
+
+credentials_path="${GSC_CREDENTIALS_PATH:-}"
+default_site_url="${GSC_SITE_URL:-}"
+gsc_source="${GSC_SOURCE:-$DEFAULT_GSC_SOURCE}"
+
+if [[ -z "$credentials_path" && -f "$DEFAULT_CREDENTIALS_PATH" ]]; then
+  credentials_path="$DEFAULT_CREDENTIALS_PATH"
+fi
+
+if [[ -z "$credentials_path" ]]; then
+  echo "Set GSC_CREDENTIALS_PATH to a service account credentials JSON file." >&2
+  exit 1
+fi
+
+args=(
+  --mcp-stdio "uvx --from $gsc_source mcp-gsc"
+  --env "GSC_CREDENTIALS_PATH=$credentials_path"
+  --env "GSC_SKIP_OAUTH=${GSC_SKIP_OAUTH:-true}"
+  --env "GSC_DATA_STATE=${GSC_DATA_STATE:-all}"
+)
+
+if [[ -n "${GSC_ALLOW_DESTRUCTIVE:-}" ]]; then
+  args+=(--env "GSC_ALLOW_DESTRUCTIVE=$GSC_ALLOW_DESTRUCTIVE")
+fi
+
+rewrite_args=()
+needs_site_url=true
+
+for arg in "$@"; do
+  if [[ "$arg" == "--site-url" ]]; then
+    needs_site_url=false
+  fi
+  rewrite_args+=("$arg")
+done
+
+if [[ -n "$default_site_url" && "$needs_site_url" == true ]]; then
+  command_name="${1:-}"
+  case "$command_name" in
+    get-search-analytics|get-site-details|get-sitemaps|inspect-url-enhanced|batch-url-inspection|check-indexing-issues|get-performance-overview|get-advanced-search-analytics|compare-search-periods|get-search-by-page-query|list-sitemaps-enhanced|get-sitemap-details|submit-sitemap|delete-sitemap|manage-sitemaps|add-site|delete-site)
+      rewrite_args=("$command_name" "--site-url" "$default_site_url" "${@:2}")
+      ;;
+  esac
+fi
+
+exec uvx mcp2cli "${args[@]}" "${rewrite_args[@]}"

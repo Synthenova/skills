@@ -1,0 +1,4 @@
+interface:
+  display_name: "GSC CLI"
+  short_description: "Use the local Search Console CLI"
+  default_prompt: "Use $gsc-cli to inspect Google Search Console properties, indexing, sitemaps, and analytics from the local CLI."
