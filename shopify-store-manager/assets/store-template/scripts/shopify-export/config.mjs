@@ -7,7 +7,18 @@ export const API_VERSION = process.env.SHOPIFY_API_VERSION ?? null;
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-export const REPO_ROOT = path.resolve(__dirname, "../..");
+function readArgValue(flags) {
+  for (let index = 0; index < process.argv.length; index += 1) {
+    if (flags.includes(process.argv[index])) {
+      return process.argv[index + 1] ?? null;
+    }
+  }
+  return null;
+}
+
+export const REPO_ROOT = path.resolve(
+  readArgValue(["--project-root", "-p"]) ?? process.cwd(),
+);
 
 export const FALLBACK_OWNER_TYPES = [
   "ARTICLE",

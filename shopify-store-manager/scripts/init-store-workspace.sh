@@ -3,8 +3,6 @@
 set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SKILL_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
-TEMPLATE_ROOT="$SKILL_ROOT/assets/store-template"
 TARGET_DIR="${1:-$PWD}"
 
 mkdir -p "$TARGET_DIR"
@@ -15,10 +13,7 @@ mkdir -p \
   "$TARGET_DIR/metafields/definitions" \
   "$TARGET_DIR/metafields/values" \
   "$TARGET_DIR/metaobjects/definitions" \
-  "$TARGET_DIR/metaobjects/entries" \
-  "$TARGET_DIR/scripts"
-
-cp -R "$TEMPLATE_ROOT/scripts/." "$TARGET_DIR/scripts/"
+  "$TARGET_DIR/metaobjects/entries"
 
 if [[ ! -f "$TARGET_DIR/.gitignore" ]]; then
   cat > "$TARGET_DIR/.gitignore" <<'EOF'

@@ -10,8 +10,8 @@ Use this skill to turn the current folder into a Shopify store workspace with cl
 ## Workflow
 
 1. Confirm the current folder is the intended store workspace.
-2. Run `scripts/init-store-workspace.sh` from this skill to stamp the current folder with the standard directory layout and reusable export scripts.
-3. Use the copied `scripts/export-shopify-metadata.mjs` entrypoint inside the target workspace to refresh store data into the repo.
+2. Run `scripts/init-store-workspace.sh` from this skill to stamp the current folder with the standard directory layout.
+3. Run the exporter from this skill to refresh store data into the target workspace.
 4. Work from the exported workspace structure when inspecting products, collections, media, metafields, and metaobjects.
 5. Refresh exported store data before making repo decisions that depend on current store state.
 
@@ -28,9 +28,6 @@ metaobjects/
   definitions/
   entries/
 products/
-scripts/
-  export-shopify-metadata.mjs
-  shopify-export/
 ```
 
 Use one folder per product handle under `products/`. Keep downloaded media under each product's `media/` directory. Keep collections one folder per collection handle under `collections/`. Keep metafield definitions separate from metafield values, and keep metaobject definitions separate from exported entries.
@@ -41,7 +38,7 @@ Use one folder per product handle under `products/`. Keep downloaded media under
 - Keep local files factual and derived from store state.
 - Keep media metadata in `media.json` and actual files in `media/`.
 - Preserve Shopify IDs, handles, URLs, alt text, ordering, and collection membership exactly as exported.
-- Use the modular exporter in `scripts/shopify-export/` when extending or patching workspace export behavior.
+- Use the exporter modules in `assets/store-template/scripts/shopify-export/` when extending or patching workspace export behavior.
 
 ## Resources
 
@@ -57,7 +54,7 @@ If no argument is provided, it initializes the current working directory.
 
 ### `assets/store-template/`
 
-Contains the reusable exporter entrypoint and modules that get copied into the target workspace.
+Contains the exporter entrypoint and modules used by the skill when writing store data into a target workspace.
 
 ### `references/workflow.md`
 

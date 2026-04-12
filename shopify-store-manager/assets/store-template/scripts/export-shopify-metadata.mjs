@@ -14,10 +14,15 @@ import {
 } from "./shopify-export/exporters/catalog.mjs";
 
 function parseArgs(argv) {
-  const options = { store: null };
+  const options = { projectRoot: null, store: null };
 
   for (let index = 0; index < argv.length; index += 1) {
     const arg = argv[index];
+    if (arg === "--project-root" || arg === "-p") {
+      options.projectRoot = argv[index + 1] ?? null;
+      index += 1;
+      continue;
+    }
     if (arg === "--store" || arg === "-s") {
       options.store = argv[index + 1] ?? null;
       index += 1;
@@ -49,6 +54,7 @@ async function main() {
     exportedAt: new Date().toISOString(),
     shop,
     apiVersion: API_VERSION,
+    projectRoot: REPO_ROOT,
     metafields: {
       definitions: metafieldDefinitions,
       values: metafieldValues,
