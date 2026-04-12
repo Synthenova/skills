@@ -1,19 +1,19 @@
 ---
 name: shopify-store-manager
-description: Initialize the current folder for any Shopify store and manage a Shopify store workspace with standard folders, reusable export scripts, and Admin GraphQL workflows. Use when Codex needs to bootstrap a new Shopify store repo, mirror live store data, export products, collections, media, metafields, or metaobjects, or keep a local store workspace aligned with Shopify as the source of truth.
+description: Initialize the current folder as a Shopify store workspace and maintain a structured local mirror of store data inside the repo. Use when Codex needs to bootstrap a store repo, organize products, collections, media, metafields, and metaobjects in a consistent layout, or keep exported store state current and easy to work with.
 ---
 
 # Shopify Store Manager
 
-Use this skill to turn the current folder into a Shopify store workspace and manage it with Shopify Admin GraphQL.
+Use this skill to turn the current folder into a Shopify store workspace with clear structure, stable export conventions, and a predictable local representation of store data.
 
 ## Workflow
 
 1. Confirm the current folder is the intended store workspace.
-2. Gather Shopify credentials from environment variables or local instructions such as `AGENTS.md`.
-3. Run `scripts/init-store-workspace.sh` from this skill to stamp the current folder with the standard directory layout and exporter scripts.
-4. Use the copied `scripts/export-shopify-metadata.mjs` entrypoint inside the target workspace to pull live store state into the repo.
-5. Treat Shopify Admin as the source of truth at the start of every task. Re-fetch before making decisions about products, collections, media, metafields, or metaobjects.
+2. Run `scripts/init-store-workspace.sh` from this skill to stamp the current folder with the standard directory layout and reusable export scripts.
+3. Use the copied `scripts/export-shopify-metadata.mjs` entrypoint inside the target workspace to refresh store data into the repo.
+4. Work from the exported workspace structure when inspecting products, collections, media, metafields, and metaobjects.
+5. Refresh exported store data before making repo decisions that depend on current store state.
 
 ## Standard Workspace
 
@@ -33,34 +33,15 @@ scripts/
   shopify-export/
 ```
 
-Use one folder per product handle under `products/`. Keep downloaded media under each product's `media/` directory. Keep collections one folder per collection handle under `collections/`.
+Use one folder per product handle under `products/`. Keep downloaded media under each product's `media/` directory. Keep collections one folder per collection handle under `collections/`. Keep metafield definitions separate from metafield values, and keep metaobject definitions separate from exported entries.
 
-## Credentials
+## Workspace Conventions
 
-Prefer environment variables:
-
-```bash
-export SHOPIFY_SHOP='your-store.myshopify.com'
-export SHOPIFY_ACCESS_TOKEN='shpat_...'
-```
-
-or:
-
-```bash
-export SHOPIFY_SHOP='your-store.myshopify.com'
-export SHOPIFY_CLIENT_ID='...'
-export SHOPIFY_CLIENT_SECRET='...'
-```
-
-If credentials live in a local file such as `AGENTS.md`, read it carefully and use only the minimum needed values.
-
-## Export Rules
-
-- Always start from live Shopify data before modifying local JSON.
-- Keep local files factual. Do not invent sync state like `pending_upload` or `synced`.
+- Refresh store data into the repo before relying on exported state for decisions.
+- Keep local files factual and derived from store state.
 - Keep media metadata in `media.json` and actual files in `media/`.
-- Preserve Shopify IDs, handles, URLs, alt text, ordering, and collection membership exactly as returned.
-- Use the modular exporter in `scripts/shopify-export/` when you need to extend or patch behavior.
+- Preserve Shopify IDs, handles, URLs, alt text, ordering, and collection membership exactly as exported.
+- Use the modular exporter in `scripts/shopify-export/` when extending or patching workspace export behavior.
 
 ## Resources
 
