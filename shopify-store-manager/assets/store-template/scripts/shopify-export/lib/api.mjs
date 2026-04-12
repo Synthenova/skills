@@ -3,7 +3,6 @@ import { mkdtemp, readFile, rm } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import { promisify } from "node:util";
-import { API_VERSION } from "../config.mjs";
 
 const execFileAsync = promisify(execFile);
 
@@ -21,8 +20,6 @@ export async function graphql(query, variables = {}, shop) {
     "--json",
     "--output-file",
     outputFile,
-    "--version",
-    API_VERSION,
   ];
 
   if (Object.keys(variables).length > 0) {

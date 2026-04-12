@@ -2,7 +2,7 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 export const SHOP = process.env.SHOPIFY_SHOP ?? null;
-export const API_VERSION = process.env.SHOPIFY_API_VERSION ?? "2025-10";
+export const API_VERSION = process.env.SHOPIFY_API_VERSION ?? null;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
