@@ -1,10 +1,8 @@
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-export const SHOP = process.env.SHOPIFY_SHOP;
+export const SHOP = process.env.SHOPIFY_SHOP ?? null;
 export const API_VERSION = process.env.SHOPIFY_API_VERSION ?? "2025-10";
-export const CLIENT_ID = process.env.SHOPIFY_CLIENT_ID;
-export const CLIENT_SECRET = process.env.SHOPIFY_CLIENT_SECRET;
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -32,4 +30,8 @@ export function requireEnv(name, value) {
     throw new Error(`Missing required environment variable: ${name}`);
   }
   return value;
+}
+
+export function resolveShop(storeArg) {
+  return requireEnv("SHOPIFY_SHOP or --store", storeArg ?? SHOP);
 }

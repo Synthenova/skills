@@ -1,5 +1,5 @@
 import path from "node:path";
-import { API_VERSION, REPO_ROOT, SHOP } from "../config.mjs";
+import { API_VERSION, REPO_ROOT } from "../config.mjs";
 import { graphql, paginateConnection } from "../lib/api.mjs";
 import {
   collectionFolderPath,
@@ -12,7 +12,7 @@ import {
   writeJson,
 } from "../lib/fs.mjs";
 
-export async function exportProducts(accessToken) {
+export async function exportProducts(shop) {
   const listQuery = `
     query ListProducts($after: String) {
       products(first: 250, after: $after) {
@@ -172,11 +172,11 @@ export async function exportProducts(accessToken) {
     }
   `;
 
-  const productRefs = await paginateConnection(listQuery, "products", {}, accessToken);
+  const productRefs = await paginateConnection(listQuery, "products", {}, shop);
   const manifestEntries = [];
 
   for (const productRef of productRefs) {
-    const detailData = await graphql(detailQuery, { id: productRef.id }, accessToken);
+    const detailData = await graphql(detailQuery, { id: productRef.id }, shop);
     const product = detailData.product;
     const folder = productFolderPath(product.handle);
     const mediaFolder = path.join(folder, "media");
@@ -296,7 +296,7 @@ export async function exportProducts(accessToken) {
 
   const manifest = {
     exportedAt: new Date().toISOString(),
-    shop: SHOP,
+    shop,
     apiVersion: API_VERSION,
     totalCount: manifestEntries.length,
     products: manifestEntries,
@@ -306,7 +306,7 @@ export async function exportProducts(accessToken) {
   return manifest;
 }
 
-export async function exportCollections(accessToken) {
+export async function exportCollections(shop) {
   const listQuery = `
     query ListCollections($after: String) {
       collections(first: 250, after: $after) {
@@ -379,11 +379,11 @@ export async function exportCollections(accessToken) {
     }
   `;
 
-  const collectionRefs = await paginateConnection(listQuery, "collections", {}, accessToken);
+  const collectionRefs = await paginateConnection(listQuery, "collections", {}, shop);
   const manifestEntries = [];
 
   for (const collectionRef of collectionRefs) {
-    const detailData = await graphql(detailQuery, { id: collectionRef.id }, accessToken);
+    const detailData = await graphql(detailQuery, { id: collectionRef.id }, shop);
     const collection = detailData.collection;
     const folder = collectionFolderPath(collection.handle);
     const mediaFolder = path.join(folder, "media");
@@ -436,7 +436,7 @@ export async function exportCollections(accessToken) {
 
   const manifest = {
     exportedAt: new Date().toISOString(),
-    shop: SHOP,
+    shop,
     apiVersion: API_VERSION,
     totalCount: manifestEntries.length,
     collections: manifestEntries,

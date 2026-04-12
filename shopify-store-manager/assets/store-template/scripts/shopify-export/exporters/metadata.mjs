@@ -1,5 +1,5 @@
 import path from "node:path";
-import { API_VERSION, FALLBACK_OWNER_TYPES, REPO_ROOT, SHOP } from "../config.mjs";
+import { API_VERSION, FALLBACK_OWNER_TYPES, REPO_ROOT } from "../config.mjs";
 import { graphql, paginateConnection } from "../lib/api.mjs";
 import { sanitizeFilename, writeJson } from "../lib/fs.mjs";
 
@@ -295,7 +295,7 @@ const RESOURCE_EXPORTS = [
   },
 ];
 
-async function fetchOwnerTypes(accessToken) {
+async function fetchOwnerTypes(shop) {
   const query = `
     query GetMetafieldOwnerTypes {
       __type(name: "MetafieldOwnerType") {
@@ -307,7 +307,7 @@ async function fetchOwnerTypes(accessToken) {
   `;
 
   try {
-    const data = await graphql(query, {}, accessToken);
+    const data = await graphql(query, {}, shop);
     const values = data?.__type?.enumValues?.map((value) => value.name) ?? [];
     return values.length ? values : FALLBACK_OWNER_TYPES;
   } catch {
@@ -315,7 +315,7 @@ async function fetchOwnerTypes(accessToken) {
   }
 }
 
-export async function exportMetafieldDefinitions(accessToken) {
+export async function exportMetafieldDefinitions(shop) {
   const query = `
     query GetMetafieldDefinitions($ownerType: MetafieldOwnerType!, $after: String) {
       metafieldDefinitions(first: 250, ownerType: $ownerType, after: $after) {
@@ -344,7 +344,7 @@ export async function exportMetafieldDefinitions(accessToken) {
     }
   `;
 
-  const ownerTypes = await fetchOwnerTypes(accessToken);
+  const ownerTypes = await fetchOwnerTypes(shop);
   const byOwnerType = [];
 
   for (const ownerType of ownerTypes) {
@@ -352,7 +352,7 @@ export async function exportMetafieldDefinitions(accessToken) {
       query,
       "metafieldDefinitions",
       { ownerType },
-      accessToken,
+      shop,
     );
 
     const snapshot = { ownerType, count: definitions.length, definitions };
@@ -368,7 +368,7 @@ export async function exportMetafieldDefinitions(accessToken) {
 
   const manifest = {
     exportedAt: new Date().toISOString(),
-    shop: SHOP,
+    shop,
     apiVersion: API_VERSION,
     totalCount: allDefinitions.length,
     ownerTypes: byOwnerType.map((entry) => ({
@@ -387,7 +387,7 @@ export async function exportMetafieldDefinitions(accessToken) {
   return manifest;
 }
 
-export async function exportMetaobjects(accessToken) {
+export async function exportMetaobjects(shop) {
   const definitionsQuery = `
     query GetMetaobjectDefinitions($after: String) {
       metaobjectDefinitions(first: 250, after: $after) {
@@ -447,11 +447,11 @@ export async function exportMetaobjects(accessToken) {
     }
   `;
 
-  const definitions = await paginateConnection(definitionsQuery, "metaobjectDefinitions", {}, accessToken);
+  const definitions = await paginateConnection(definitionsQuery, "metaobjectDefinitions", {}, shop);
 
   const definitionsManifest = {
     exportedAt: new Date().toISOString(),
-    shop: SHOP,
+    shop,
     apiVersion: API_VERSION,
     totalCount: definitions.length,
     definitions: definitions.map((definition) => ({
@@ -478,7 +478,7 @@ export async function exportMetaobjects(accessToken) {
   const entrySnapshots = [];
 
   for (const definition of definitions) {
-    const entries = await paginateConnection(entriesQuery, "metaobjects", { type: definition.type }, accessToken);
+    const entries = await paginateConnection(entriesQuery, "metaobjects", { type: definition.type }, shop);
     const snapshot = {
       type: definition.type,
       name: definition.name,
@@ -495,7 +495,7 @@ export async function exportMetaobjects(accessToken) {
 
   const entriesManifest = {
     exportedAt: new Date().toISOString(),
-    shop: SHOP,
+    shop,
     apiVersion: API_VERSION,
     totalTypes: entrySnapshots.length,
     totalEntries: entrySnapshots.reduce((sum, snapshot) => sum + snapshot.count, 0),
@@ -518,17 +518,17 @@ export async function exportMetaobjects(accessToken) {
   };
 }
 
-export async function exportMetafieldValues(accessToken) {
+export async function exportMetafieldValues(shop) {
   const snapshots = [];
 
   for (const resource of RESOURCE_EXPORTS) {
     let snapshot;
 
     if (resource.rootKey === "shop") {
-      const data = await graphql(resource.query, {}, accessToken);
+      const data = await graphql(resource.query, {}, shop);
       snapshot = resource.normalize(data);
     } else {
-      const nodes = await paginateConnection(resource.query, resource.rootKey, {}, accessToken);
+      const nodes = await paginateConnection(resource.query, resource.rootKey, {}, shop);
       const resources = nodes.map((node) => ({
         id: node.id,
         title: resource.title?.(node) ?? node.title ?? node.handle ?? node.id,
@@ -557,7 +557,7 @@ export async function exportMetafieldValues(accessToken) {
 
   const manifest = {
     exportedAt: new Date().toISOString(),
-    shop: SHOP,
+    shop,
     apiVersion: API_VERSION,
     resourceTypes: snapshots,
     totalMetafields: snapshots.reduce((sum, snapshot) => sum + snapshot.count, 0),

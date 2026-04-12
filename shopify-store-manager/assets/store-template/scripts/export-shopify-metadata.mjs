@@ -1,8 +1,7 @@
 #!/usr/bin/env node
 
 import path from "node:path";
-import { API_VERSION, REPO_ROOT, SHOP, requireEnv } from "./shopify-export/config.mjs";
-import { getAccessToken } from "./shopify-export/lib/api.mjs";
+import { API_VERSION, REPO_ROOT, resolveShop } from "./shopify-export/config.mjs";
 import { writeJson } from "./shopify-export/lib/fs.mjs";
 import {
   exportMetafieldDefinitions,
@@ -14,9 +13,23 @@ import {
   exportProducts,
 } from "./shopify-export/exporters/catalog.mjs";
 
+function parseArgs(argv) {
+  const options = { store: null };
+
+  for (let index = 0; index < argv.length; index += 1) {
+    const arg = argv[index];
+    if (arg === "--store" || arg === "-s") {
+      options.store = argv[index + 1] ?? null;
+      index += 1;
+    }
+  }
+
+  return options;
+}
+
 async function main() {
-  requireEnv("SHOPIFY_SHOP", SHOP);
-  const accessToken = await getAccessToken();
+  const options = parseArgs(process.argv.slice(2));
+  const shop = resolveShop(options.store);
 
   const [
     metafieldDefinitions,
@@ -25,16 +38,16 @@ async function main() {
     products,
     collections,
   ] = await Promise.all([
-    exportMetafieldDefinitions(accessToken),
-    exportMetafieldValues(accessToken),
-    exportMetaobjects(accessToken),
-    exportProducts(accessToken),
-    exportCollections(accessToken),
+    exportMetafieldDefinitions(shop),
+    exportMetafieldValues(shop),
+    exportMetaobjects(shop),
+    exportProducts(shop),
+    exportCollections(shop),
   ]);
 
   const summary = {
     exportedAt: new Date().toISOString(),
-    shop: SHOP,
+    shop,
     apiVersion: API_VERSION,
     metafields: {
       definitions: metafieldDefinitions,
