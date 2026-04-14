@@ -4,10 +4,10 @@ set -euo pipefail
 SCRIPT_DIR=$(cd -- "$(dirname "${BASH_SOURCE[0]}")" && pwd)
 export MCP2CLI_CONFIG_DIR="${SCRIPT_DIR}/../config"
 
-if [ -z "${POSTHOG_MCP_TOKEN:-}" ]; then
-  echo "POSTHOG_MCP_TOKEN is required" >&2
+if [ -z "${POSTHOG_TOKEN:-}" ]; then
+  echo "POSTHOG_TOKEN is required" >&2
   exit 1
 fi
 
-export POSTHOG_MCP_AUTH_HEADER="Bearer ${POSTHOG_MCP_TOKEN}"
+export POSTHOG_MCP_AUTH_HEADER="Bearer ${POSTHOG_TOKEN}"
 exec /home/lamrin/.cache/uv/archive-v0/Hj__dDMjU1XU-7V8sJzvv/bin/mcp2cli @posthog-cli "$@"
