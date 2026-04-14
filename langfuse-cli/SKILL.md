@@ -1,8 +1,9 @@
+---
 name: langfuse-cli
 description: Access Langfuse data and tools from the terminal. Use this whenever the user wants to inspect Langfuse traces, observations, prompts, sessions, scores, datasets, or exceptions from the terminal.
 compatibility: Requires `uvx` and `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` in the environment.
 ---
-
+---
 # Langfuse CLI
 
 This skill uses a local wrapper plus the configuration in `config/`.

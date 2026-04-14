@@ -1,8 +1,9 @@
+---
 name: posthog-cli
 description: Access PostHog data and tools from the terminal. Use this whenever the user wants to inspect PostHog product analytics, feature flags, experiments, dashboards, persons, prompts, LLM traces, or documentation from the terminal, especially when they mention PostHog, feature flags, experiments, insights, events, logs, dashboards, or analytics queries.
 compatibility: Requires `uvx`, network access to PostHog, and the PostHog token set in the environment.
 ---
-
+---
 # PostHog CLI
 
 This skill uses a local wrapper plus the configuration in `config/`.
