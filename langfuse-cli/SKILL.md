@@ -1,11 +1,11 @@
 name: langfuse-cli
-description: Access Langfuse through a local stdio `langfuse-mcp` process wrapped by `mcp2cli`. Use this whenever the user wants to inspect Langfuse traces, observations, prompts, sessions, scores, datasets, or exceptions from the terminal and should talk to the MCP over stdio instead of a long-lived HTTP bridge.
-compatibility: Requires `uvx` with `mcp2cli` access, `uvx --python 3.11 langfuse-mcp`, and `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` in the environment.
+description: Access Langfuse data and tools from the terminal. Use this whenever the user wants to inspect Langfuse traces, observations, prompts, sessions, scores, datasets, or exceptions from the terminal.
+compatibility: Requires `uvx` and `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` in the environment.
 ---
 
 # Langfuse CLI
 
-This skill uses a skill-local `mcp2cli` baked config plus the wrapper in `scripts/`, but it connects to Langfuse over stdio rather than an HTTP MCP bridge.
+This skill uses a local wrapper plus the configuration in `config/`.
 
 From the `langfuse-cli` skill directory, use the wrapper instead of repeating the stdio command and env setup:
 
@@ -13,7 +13,7 @@ From the `langfuse-cli` skill directory, use the wrapper instead of repeating th
 bash scripts/langfuse-cli --list
 ```
 
-The wrapper sets `MCP2CLI_CONFIG_DIR` to the skill's own `config/` directory, so this skill does not depend on global `~/.config/mcp2cli` state. The wrapper expects `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` to already be exported in the shell.
+The wrapper uses the skill's own `config/` directory, so this skill does not depend on global configuration state. The wrapper expects `LANGFUSE_PUBLIC_KEY`, `LANGFUSE_SECRET_KEY`, and `LANGFUSE_HOST` to already be exported in the shell.
 
 Before using it:
 
@@ -23,7 +23,7 @@ export LANGFUSE_SECRET_KEY=...
 export LANGFUSE_HOST=https://cloud.langfuse.com
 ```
 
-If `/tmp/langfuse_mcp.log` exists but is not writable by the current user, the stdio server can fail at startup. Clear or chown that file before retrying.
+If the wrapper log file exists but is not writable by the current user, startup can fail. Clear or chown that file before retrying.
 
 ## Core workflow
 
@@ -130,7 +130,7 @@ These were verified against the stdio server before packaging this skill:
 - `list-datasets --limit 1` also returned a valid empty paginated result. Empty collections are normal and should not be treated as transport failures.
 - `get-data-schema` returns a Markdown-style schema document, not JSON. Do not assume every tool returns machine-shaped JSON.
 - `fetch-traces --help` shows `--include-observations` and `--output-mode`. Those materially affect response size and latency.
-- If `/tmp/langfuse_mcp.log` is root-owned from an earlier privileged run, the stdio server can fail with `PermissionError`. Remove that file before retrying.
+- If the wrapper log file is root-owned from an earlier privileged run, startup can fail with `PermissionError`. Remove that file before retrying.
 
 ## What to use first
 

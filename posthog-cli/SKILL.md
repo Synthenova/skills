@@ -1,19 +1,19 @@
 name: posthog-cli
-description: Access the PostHog MCP at https://mcp.posthog.com/mcp through a local mcp2cli wrapper. Use this whenever the user wants to inspect PostHog product analytics, feature flags, experiments, dashboards, persons, prompts, LLM traces, or documentation from the terminal, especially when they mention PostHog, feature flags, experiments, insights, events, logs, dashboards, or analytics queries and need to operate through the MCP instead of writing custom API code.
-compatibility: Requires `uvx` with `mcp2cli`, network access to the PostHog MCP endpoint, and `POSTHOG_MCP_TOKEN` set in the environment.
+description: Access PostHog data and tools from the terminal. Use this whenever the user wants to inspect PostHog product analytics, feature flags, experiments, dashboards, persons, prompts, LLM traces, or documentation from the terminal, especially when they mention PostHog, feature flags, experiments, insights, events, logs, dashboards, or analytics queries.
+compatibility: Requires `uvx`, network access to PostHog, and the PostHog token set in the environment.
 ---
 
 # PostHog CLI
 
-This skill uses a skill-local `mcp2cli` baked config plus the wrapper in `scripts/`.
+This skill uses a local wrapper plus the configuration in `config/`.
 
 Before using it, ensure the raw PostHog token is present in the environment:
 
 ```bash
-export POSTHOG_MCP_TOKEN=...
+export POSTHOG_TOKEN=...
 ```
 
-The wrapper sets `MCP2CLI_CONFIG_DIR` to the skill's own `config/` directory, derives the required `Authorization: Bearer ...` header from `POSTHOG_MCP_TOKEN`, and then calls the baked tool.
+The wrapper derives the required `Authorization: Bearer ...` header from the token in the environment and then uses the skill's own `config/` directory.
 
 From the `posthog-cli` skill directory, use the wrapper like this:
 
@@ -63,7 +63,6 @@ bash scripts/posthog-cli --jq '.[].name' event-definitions-list --limit 5
 - `organization-details-get`: fetch details for the active organization.
 - `switch-organization`: change the active organization.
 - `switch-project`: change the active project.
-- `debug-mcp-ui-apps`: return sample data for MCP Apps SDK debugging.
 
 ### Events, properties, and actions
 
@@ -224,7 +223,7 @@ Start with these tools for most requests:
 
 - Expect project-level access by default.
 - If an org-level tool fails with `403`, do not keep retrying. Explain that the token is project-scoped and switch to project-based tools.
-- Keep the secret out of command arguments. This wrapper is configured to read `POSTHOG_MCP_TOKEN` from the environment.
+- Keep the secret out of command arguments. This wrapper is configured to read the PostHog token from the environment.
 
 ## CLI gotchas
 
