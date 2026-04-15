@@ -1,0 +1,8 @@
+interface:
+  display_name: "Marketing Autoreason"
+  short_description: "Adversarial marketing iteration loop"
+  default_prompt: "Use $marketing-autoreason to pressure-test positioning, copy, or hooks with fresh critics, blind judges, and evidence from prior campaigns."
+  brand_color: "#C65C2E"
+
+policy:
+  allow_implicit_invocation: true
