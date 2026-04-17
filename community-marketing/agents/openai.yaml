@@ -1,0 +1,4 @@
+interface:
+  display_name: "Community Marketing"
+  short_description: "Community-led growth and engagement playbooks"
+  default_prompt: "Use this skill when planning or executing community marketing across forums, social communities, Slack, Discord, Reddit, and ambassador programs. Focus on where to participate, what to say, and how to measure whether engagement is translating into qualified attention or demand."
