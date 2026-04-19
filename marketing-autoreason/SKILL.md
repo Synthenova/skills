@@ -25,6 +25,8 @@ Use this skill when the task is qualitative and you need stronger output than a 
 - Do not let later stages see more context than their role requires.
 - Treat the loop as adversarial, not collaborative.
 
+Use the exact role boundaries in [role-specs.md](references/role-specs.md) when you need to run the loop explicitly with separate agents.
+
 ## When To Use Evidence
 
 If you have campaign data, audience research, competitor copy, or brand rules, load that into the critique and judging stages.
@@ -38,3 +40,4 @@ Use the blind judging rules in [judging-scorecard.md](references/judging-scoreca
 ## Output
 
 Return the winning candidate, the main reasons it survived, and the evidence used to ground the decision.
+Feed the winning output and any observed campaign results back into the knowledge layer so later runs debate against better evidence.
