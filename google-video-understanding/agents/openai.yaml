@@ -1,0 +1,4 @@
+interface:
+  display_name: "Google Video Understanding"
+  short_description: "Analyze local videos or YouTube URLs with Gemini."
+  default_prompt: "Use $google-video-understanding to analyze a local video or YouTube URL into markdown."
