@@ -1,4 +1,0 @@
-interface:
-  display_name: "Steel Orchestrator Remote Control"
-  short_description: "Manage Steel profiles and attach browsers remotely"
-  default_prompt: "Use $steel-orchestrator-remote-control to list, create, start, and stop Steel profiles via HTTP using the STEEL_ORCHESTRATOR_HOST environment variable, then attach agent-browser to the profile WS endpoint for browser control."

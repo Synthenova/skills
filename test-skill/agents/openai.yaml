@@ -1,4 +1,0 @@
-interface:
-  display_name: "Test Skill"
-  short_description: "Smoke-test a skill folder"
-  default_prompt: "Use $test-skill to smoke-test a skill folder and validate its required files."
