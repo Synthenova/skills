@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Browser Harness"
+  short_description: "Self-healing agent-browser skill."
+  default_prompt: "Use $agent-browser-harness to drive agent-browser with self-healing browser workflow and TikTok guidance."
