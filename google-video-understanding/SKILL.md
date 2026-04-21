@@ -17,7 +17,7 @@ Inputs:
 
 Defaults:
 - model: `gemini-flash-lite-latest`
-- prompt file: `/Users/nirmal/Desktop/conthunt/backend/app/prompts/video_analysis.py`
+- prompt: bundled default analysis prompt inside `scripts/video_analysis.py`
 - max duration: 180 seconds
 
 Authentication:
@@ -33,7 +33,7 @@ Authentication:
    - `google-genai`
    - `yt-dlp`
 4. Let `scripts/video_analysis.py`:
-   - load `DEFAULT_ANALYSIS_PROMPT` from the prompt file
+   - use its bundled default analysis prompt
    - reject any input longer than 3 minutes
    - send the source to Gemini
    - write markdown to the requested output path
@@ -44,7 +44,7 @@ Authentication:
 - Use `yt-dlp` only for YouTube metadata checks, not for downloading unless the skill is explicitly changed later.
 - Use Gemini directly through the `google-genai` SDK.
 - Write plain markdown only.
-- Fail fast on missing API key, missing prompt constant, unsupported duration, or missing local file.
+- Fail fast on missing API key, unsupported duration, empty custom prompt file, or missing local file.
 
 ## Commands
 
