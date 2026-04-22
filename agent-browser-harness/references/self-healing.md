@@ -123,7 +123,7 @@ Symptoms:
 - screenshots show a different page than expected
 
 Recovery:
-- read [tabs.md](tabs.md)
+- read [../interaction-skills/tabs.md](../interaction-skills/tabs.md)
 - use `agent-browser tab`
 - switch tabs, then re-check URL/title/screenshot
 
@@ -135,7 +135,7 @@ Symptoms:
 - interaction works on parent page but not the target control
 
 Recovery:
-- read [iframes.md](iframes.md)
+- read [../interaction-skills/iframes.md](../interaction-skills/iframes.md)
 - re-snapshot first because `agent-browser` may already inline iframe refs
 - use `frame ...` only when necessary
 
@@ -147,7 +147,7 @@ Symptoms:
 - wrong scroll container consumed input
 
 Recovery:
-- read [scrolling.md](scrolling.md)
+- read [../interaction-skills/scrolling.md](../interaction-skills/scrolling.md)
 - use `scrollintoview`
 - take a screenshot
 - re-measure with a new snapshot after opening overlays
@@ -178,7 +178,7 @@ Symptoms:
 - beforeunload blocks leaving an editor or upload page
 
 Recovery:
-- read [dialogs.md](dialogs.md)
+- read [../interaction-skills/dialogs.md](../interaction-skills/dialogs.md)
 - use `agent-browser dialog status`
 - accept or dismiss explicitly
 

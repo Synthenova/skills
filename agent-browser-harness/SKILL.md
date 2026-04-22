@@ -30,26 +30,22 @@ This skill owns:
 4. If the work gets stuck on browser mechanics, load the relevant interaction reference.
 5. Verify after every meaningful action with `snapshot`, `get ...`, `screenshot`, URL checks, or network checks.
 
-## Interaction References
+## Interaction Skills
 
 Read these only when the current failure mode matches:
 
-- [references/dialogs.md](references/dialogs.md) for `alert`, `confirm`, `prompt`, and `beforeunload`
-- [references/tabs.md](references/tabs.md) for wrong-tab, hidden-tab, or tab-order confusion
-- [references/iframes.md](references/iframes.md) for iframe, nested browsing context, or cross-origin widget issues
-- [references/uploads.md](references/uploads.md) for file chooser and upload controls
-- [references/network-requests.md](references/network-requests.md) when submit state is ambiguous
-- [references/scrolling.md](references/scrolling.md) when the wrong scroll container is consuming input
-- [references/screenshots.md](references/screenshots.md) when you need visual discovery or post-action verification
+- [interaction-skills/dialogs.md](interaction-skills/dialogs.md) for `alert`, `confirm`, `prompt`, and `beforeunload`
+- [interaction-skills/tabs.md](interaction-skills/tabs.md) for wrong-tab, hidden-tab, or tab-order confusion
+- [interaction-skills/iframes.md](interaction-skills/iframes.md) for iframe, nested browsing context, or cross-origin widget issues
+- [interaction-skills/uploads.md](interaction-skills/uploads.md) for file chooser and upload controls
+- [interaction-skills/network-requests.md](interaction-skills/network-requests.md) when submit state is ambiguous
+- [interaction-skills/scrolling.md](interaction-skills/scrolling.md) when the wrong scroll container is consuming input
+- [interaction-skills/screenshots.md](interaction-skills/screenshots.md) when you need visual discovery or post-action verification
 
 ## Domain Skills
 
 - [domain-skills/tiktok/upload.md](domain-skills/tiktok/upload.md) for TikTok Studio upload and scheduling from a local video file
 - [domain-skills/instagram/upload.md](domain-skills/instagram/upload.md) for Instagram reel upload from a local video file
-
-## Legacy References
-
-- [references/tiktok.md](references/tiktok.md) remains available for older TikTok Studio guidance
 
 ## Rules That Hold Up
 
