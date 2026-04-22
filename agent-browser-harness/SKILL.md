@@ -26,7 +26,7 @@ This skill owns:
 
 1. Load `agent-browser`.
 2. Read [references/self-healing.md](references/self-healing.md).
-3. If the work is site-specific, check the exported domain references before inventing a new approach.
+3. If the work is site-specific, check `domain-skills/` first before inventing a new approach.
 4. If the work gets stuck on browser mechanics, load the relevant interaction reference.
 5. Verify after every meaningful action with `snapshot`, `get ...`, `screenshot`, URL checks, or network checks.
 
@@ -42,9 +42,14 @@ Read these only when the current failure mode matches:
 - [references/scrolling.md](references/scrolling.md) when the wrong scroll container is consuming input
 - [references/screenshots.md](references/screenshots.md) when you need visual discovery or post-action verification
 
-## Domain References
+## Domain Skills
 
-- [references/tiktok.md](references/tiktok.md) for TikTok Studio upload and scheduling flows
+- [domain-skills/tiktok/upload.md](domain-skills/tiktok/upload.md) for TikTok Studio upload and scheduling from a local video file
+- [domain-skills/instagram/upload.md](domain-skills/instagram/upload.md) for Instagram reel upload from a local video file
+
+## Legacy References
+
+- [references/tiktok.md](references/tiktok.md) remains available for older TikTok Studio guidance
 
 ## Rules That Hold Up
 

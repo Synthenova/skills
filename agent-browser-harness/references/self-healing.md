@@ -57,6 +57,49 @@ Do not chain multiple unverified actions through a fragile UI state.
 
 ## Failure Classes
 
+### Agent Browser is completely wedged
+
+Symptoms:
+- `agent-browser` commands hang with no output
+- `get url`, `tab list`, `snapshot`, and `screenshot` all stall
+- one stuck command causes later commands to stall too
+- the browser window may still be visibly alive even though the CLI is not
+
+Recovery:
+
+1. Kill only the stuck `agent-browser` client commands first.
+2. If new commands are still blocked, restart the `agent-browser` daemon.
+3. Preserve the browser process if the page state matters.
+4. Reconnect and verify the session before resuming the workflow.
+
+Preferred recovery sequence:
+
+```bash
+pkill -f '/usr/lib/node_modules/agent-browser/bin/agent-browser-linux-x64' || true
+agent-browser session
+agent-browser tab list
+agent-browser get url
+```
+
+If the browser process is still alive, this often restores control without losing the page state.
+
+If the daemon restart comes back on a blank tab, assume you lost the daemon session, not necessarily the browser process. Re-open the target page or recover via the site's draft/continue flow.
+
+If you need to confirm whether the underlying Chrome process survived:
+
+```bash
+ps -ef | rg '/chrome --remote-debugging-port=0'
+```
+
+If the browser process is gone too, relaunch the configured `agent-browser` profile cleanly and resume from the last durable checkpoint.
+
+Rules:
+- Do not keep stacking new `agent-browser` commands on top of a known hung session.
+- Kill the stuck client processes before deciding the whole browser is dead.
+- Prefer preserving the browser window when the page contains a draft, upload, or partially completed editor state.
+- After recovery, treat the session as freshly attached: re-check tabs, URL, and refs.
+- In this setup, if the CLI is wedged, assume raw CDP is likely wedged too. Do not burn time on CDP fallback probing; restart the configured session cleanly instead.
+
 ### Refs went stale
 
 Symptoms:
