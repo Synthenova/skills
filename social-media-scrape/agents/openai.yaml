@@ -1,0 +1,4 @@
+interface:
+  display_name: "Social Media Scrape"
+  short_description: "Scrape public social media APIs"
+  default_prompt: "Use $social-media-scrape to fetch TikTok videos by keyword and summarize the results."
