@@ -34,6 +34,7 @@ Available interaction skills:
 - `interaction-skills/connection.md` — startup sequence, tab visibility, omnibox popup fix
 
 Available domain skills:
+- `instagram/reels-download.md`
 - `tiktok/upload.md`
 
 ## Tool call shape
@@ -95,7 +96,7 @@ Useful commands:
 
 ```bash
 rg --files domain-skills
-rg -n "tiktok|upload" domain-skills
+rg -n "instagram|tiktok|upload|reel" domain-skills
 ```
 
 ## Always contribute back
