@@ -34,3 +34,12 @@ Add scores across judges and promote the top scorer.
 - Clear customer payoff
 - Tight, memorable phrasing
 - Consistency with proven performance and brand voice
+
+## Tie-Break Rule
+
+If brand voice and evidence point in different directions, use this order:
+
+1. Prefer the candidate backed by the strongest direct evidence from the knowledge layer.
+2. Preserve brand voice in the phrasing and tone of that candidate.
+3. If evidence support is effectively equal, choose the more on-brand option.
+4. If evidence is weak, stale, or indirect, let brand voice decide.

@@ -37,6 +37,15 @@ See [knowledge-layer.md](references/knowledge-layer.md) for the evidence types t
 
 Use the blind judging rules in [judging-scorecard.md](references/judging-scorecard.md).
 
+## Tie-Break Rule
+
+When brand voice guidance conflicts with performance evidence, prefer the option that is best supported by direct evidence from the knowledge layer.
+
+- Keep brand voice as the constraint on tone, framing, and wording.
+- Do not override a proven performer just to preserve a softer or more generic voice.
+- If two options are equally supported by evidence, pick the one that is more on-brand.
+- If evidence is weak, stale, or indirect, let brand voice break the tie.
+
 ## Output
 
 Return the winning candidate, the main reasons it survived, and the evidence used to ground the decision.
