@@ -31,6 +31,7 @@ Common flags:
 - `--cursor`: pagination cursor from a previous response
 - `--trim`: request trimmed API output
 - `--limit`: cap how many items are printed locally
+- `--sort-local`: reorder fetched results locally by `plays`, `likes`, `comments`, `shares`, or `newest`
 - `--summary`: print a concise table instead of raw JSON
 - `--short`: print compact JSON with text fields, hashtags, and the highest-quality video URL
 - `--api-key`: override `SCRAPE_CREATORS_API_KEY` for one-off runs
@@ -39,6 +40,7 @@ Examples:
 
 ```bash
 python3 scripts/search_tiktok_keyword.py --query "super bowl" --summary
+python3 scripts/search_tiktok_keyword.py --query "super bowl" --sort-local likes --short --limit 3
 python3 scripts/search_tiktok_keyword.py --query "super bowl" --short --limit 3
 python3 scripts/search_tiktok_keyword.py --query "travel tips" --sort-by most-liked --date-posted this-month --limit 5 --summary
 python3 scripts/search_tiktok_keyword.py --query "street food" --cursor 10 --trim
@@ -57,6 +59,7 @@ Common flags:
 - `--max-id`: pagination cursor from a previous response
 - `--trim`: request trimmed API output
 - `--limit`: cap how many items are printed locally
+- `--sort-local`: reorder fetched results locally by `plays`, `likes`, `comments`, or `newest`
 - `--summary`: print a concise table instead of raw JSON
 - `--short`: print compact JSON with available text fields and the highest-quality video URL
 - `--api-key`: override `SCRAPE_CREATORS_API_KEY` for one-off runs
@@ -65,6 +68,7 @@ Examples:
 
 ```bash
 python3 scripts/get_instagram_reels.py --handle "adrianhorning" --summary
+python3 scripts/get_instagram_reels.py --handle "adrianhorning" --sort-local plays --short --limit 3
 python3 scripts/get_instagram_reels.py --handle "adrianhorning" --short --limit 3
 python3 scripts/get_instagram_reels.py --user-id "2700692569" --limit 5
 python3 scripts/get_instagram_reels.py --user-id "2700692569" --max-id "QVFC..." --trim --summary
@@ -76,6 +80,7 @@ python3 scripts/get_instagram_reels.py --user-id "2700692569" --max-id "QVFC..."
 - Keep the raw JSON when downstream work needs full `aweme_info`, `statistics`, `video`, or `author` fields.
 - Use `--summary` only when the user wants a quick readout.
 - Use `--short` when the user wants only essential text fields plus a main high-quality video URL.
+- Use `--sort-local` when the API does not expose the ranking you want, or when you want a different local presentation of the fetched page.
 - Preserve and reuse the response `cursor` when fetching additional pages.
 - Treat region as proxy placement, not a strict content filter.
 - Instagram reels do not include captions from this endpoint; do not promise them in summaries.

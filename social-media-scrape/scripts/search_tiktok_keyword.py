@@ -23,6 +23,7 @@ DATE_POSTED_VALUES = {
     "all-time",
 }
 SORT_BY_VALUES = {"relevance", "most-liked", "date-posted"}
+LOCAL_SORT_VALUES = {"plays", "likes", "comments", "shares", "newest"}
 
 
 def parse_args() -> argparse.Namespace:
@@ -54,6 +55,11 @@ def parse_args() -> argparse.Namespace:
         type=int,
         default=10,
         help="Maximum number of items to print locally. Default: 10.",
+    )
+    parser.add_argument(
+        "--sort-local",
+        choices=sorted(LOCAL_SORT_VALUES),
+        help="Reorder fetched results locally by plays, likes, comments, shares, or newest.",
     )
     parser.add_argument(
         "--api-key",
@@ -224,6 +230,37 @@ def print_summary(payload: dict[str, Any], limit: int) -> None:
         print()
 
 
+def tiktok_sort_key(item: dict[str, Any], mode: str) -> int:
+    aweme = item.get("aweme_info") or {}
+    stats = aweme.get("statistics") or {}
+    if mode == "plays":
+        return stats.get("play_count") or 0
+    if mode == "likes":
+        return stats.get("digg_count") or 0
+    if mode == "comments":
+        return stats.get("comment_count") or 0
+    if mode == "shares":
+        return stats.get("share_count") or 0
+    if mode == "newest":
+        return aweme.get("create_time") or 0
+    return 0
+
+
+def maybe_sort_payload(payload: dict[str, Any], mode: str | None) -> dict[str, Any]:
+    if not mode:
+        return payload
+    items = payload.get("search_item_list")
+    if not isinstance(items, list):
+        return payload
+    sorted_payload = dict(payload)
+    sorted_payload["search_item_list"] = sorted(
+        items,
+        key=lambda item: tiktok_sort_key(item, mode),
+        reverse=True,
+    )
+    return sorted_payload
+
+
 def main() -> None:
     args = parse_args()
     if args.limit < 1:
@@ -233,7 +270,7 @@ def main() -> None:
     if not api_key:
         raise SystemExit("Missing API key. Set SCRAPE_CREATORS_API_KEY or pass --api-key.")
 
-    payload = fetch_json(build_url(args), api_key)
+    payload = maybe_sort_payload(fetch_json(build_url(args), api_key), args.sort_local)
     if args.short:
         print_short(payload, args.limit)
         return
