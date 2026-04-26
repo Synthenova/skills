@@ -1,0 +1,4 @@
+interface:
+  display_name: "ChatGPT API"
+  short_description: "Use ChatGPT web backend flows"
+  default_prompt: "Use $chatgpt-api to send a prompt, upload an image, or generate an image through the authenticated ChatGPT web app backend."
