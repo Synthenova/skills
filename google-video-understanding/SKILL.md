@@ -16,7 +16,7 @@ Inputs:
 - `OUTPUT.md`: markdown destination path
 
 Defaults:
-- model: `gemini-flash-lite-latest`
+- model: `gemini-2.5-flash-lite`
 - prompt: bundled default analysis prompt inside `scripts/video_analysis.py`
 - max duration: 180 seconds
 

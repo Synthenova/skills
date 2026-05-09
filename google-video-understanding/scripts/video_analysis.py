@@ -14,7 +14,7 @@ from google.genai import types
 from yt_dlp import YoutubeDL
 
 
-DEFAULT_MODEL = "gemini-flash-lite-latest"
+DEFAULT_MODEL = "gemini-2.5-flash-lite"
 MAX_DURATION_SECONDS = 180.0
 POLL_INTERVAL_SECONDS = 2.0
 MAX_POLL_SECONDS = 120.0
