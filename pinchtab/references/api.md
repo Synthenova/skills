@@ -316,6 +316,11 @@ Common sync states:
 - `ready`
 - `error`
 
+Only use `/profiles/PROFILE_ID/sync` for pre-launch download/preparation.
+Do not call `sync` immediately after `stop`. A stopped cloud-backed profile may
+still be uploading/finalizing and will continue holding its lease until finalize
+finishes.
+
 ### Cloud finalize status after stop
 
 Cloud-backed profiles can continue uploading after the browser stops. Poll finalize status and recover if needed:
@@ -337,6 +342,24 @@ Common finalize states:
 - `error`
 
 `discard-local` releases the lease and discards unsynced local changes. The cloud copy remains intact and can be imported again later.
+
+Correct stop/start recovery flow for cloud-backed profiles:
+
+```bash
+# Stop the running profile
+curl -X POST /profiles/PROFILE_ID/stop
+
+# Poll finalize, not sync
+curl /profiles/PROFILE_ID/cloud/finalize
+
+# Start again only after finalize is done/idle
+curl -X POST /profiles/PROFILE_ID/start
+```
+
+Why: `stop` starts async cloud finalize/upload work. That finalize job keeps the
+cloud lease until it reaches `releasing-lease`/done. If you call
+`/profiles/PROFILE_ID/sync` or `/profiles/PROFILE_ID/start` too early, PinchTab
+can surface a lease conflict such as `profile is in use by ... until ...`.
 
 ## Screenshot
 

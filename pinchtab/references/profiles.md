@@ -36,6 +36,18 @@ curl -X POST http://localhost:9867/profiles/<ID>/stop
 curl -X POST http://localhost:9867/stop/<ID>
 ```
 
+For cloud-backed `pinchtab` profiles, `stop` can start an async finalize/upload
+job. Do not call `/profiles/<ID>/sync` immediately after `stop`. Poll finalize
+instead:
+
+```bash
+curl http://localhost:9867/profiles/<ID>/cloud/finalize
+```
+
+Start the profile again only after finalize is done/idle. Otherwise the cloud
+lease can still be held by the stopped session and `start` or `sync` can return
+HTTP 409 lease conflicts.
+
 ## Check instance status
 
 ```bash
@@ -86,6 +98,24 @@ curl http://localhost:$PORT/snapshot?maxTokens=4000
 # 4. Stop when done
 curl -s -X POST http://localhost:9867/profiles/$PROFILE_ID/stop
 ```
+
+## Cloud-backed stop/start flow
+
+For cloud-backed `pinchtab` profiles:
+
+```bash
+# 1. Stop the profile
+curl -X POST http://localhost:9867/profiles/$PROFILE_ID/stop
+
+# 2. Poll finalize until done/idle
+curl http://localhost:9867/profiles/$PROFILE_ID/cloud/finalize
+
+# 3. Start again
+curl -X POST http://localhost:9867/profiles/$PROFILE_ID/start
+```
+
+Use `/profiles/$PROFILE_ID/sync` before launch when the profile needs download
+or local preparation. Do not use `sync` as the next step after `stop`.
 
 ## Profile IDs
 
