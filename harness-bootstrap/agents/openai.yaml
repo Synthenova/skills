@@ -1,0 +1,4 @@
+interface:
+  display_name: "Harness Bootstrap"
+  short_description: "Bootstrap agent-ready repo harnesses"
+  default_prompt: "Use $harness-bootstrap to scan this repo, create .harness readiness artifacts, and report what is not agent-ready yet."
